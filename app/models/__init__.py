@@ -1,0 +1,7 @@
+""" 模型初始化:统一导出所有模型，便于Tortoise ORM发现并建立映射 """
+from app.models.patient import Patient
+
+# 供外部导入和 Tortoise 配置引用
+__all__ = [
+  "Patient",
+]

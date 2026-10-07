@@ -86,6 +86,7 @@ dmypy.json
 !.vscode/settings.json
 !.vscode/extensions.json
 .idea/
+.codeartsdoer/
 *.swp
 *.swo
 *~

@@ -30,7 +30,7 @@
 | 开发工具 | VSCode | 主开发环境 |
 | Python 版本 | ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white) | 3.12 |
 | 项目管理工具 | uv | 高速 Python 包管理器 |
-| 数据库 | MySQL 8 + Navicat | 关系型数据存储与可视化管理 |
+| 数据库 | MySQL 8 + DataGrip | 关系型数据存储与可视化管理 |
 | Web 框架 | FastAPI | 高性能异步 API 框架 |
 | 服务器 | Uvicorn | ASGI 服务器 |
 | ORM 框架 | Tortoise-ORM | 异步 ORM |
