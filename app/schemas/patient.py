@@ -2,7 +2,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import date, datetime
 
-# 患者基本信息模型
+# 患者基本信息
 class PatientBase(BaseModel):
   name: str
   age: int
@@ -17,7 +17,26 @@ class PatientBase(BaseModel):
   medical_history: Optional[str] = None
   allergies: Optional[str] = None
 
-# 患者信息的响应体
+# 创建患者 请求体
+class PatientCreate(PatientBase):
+  pass
+
+# 更新患者 请求体
+class PatientUpdate(BaseModel):
+  name: Optional[str] = None
+  age: Optional[int] = None
+  gender: Optional[str] = None
+  diabetes_type: Optional[str] = None
+  diagnosis_date: Optional[date] = None
+  height: Optional[float] = None
+  weight: Optional[float] = None
+  phone: Optional[str] = None
+  emergency_contact: Optional[str] = None
+  emergency_phone: Optional[str] = None
+  medical_history: Optional[str] = None
+  allergies: Optional[str] = None
+
+# 患者基本信息响应体
 class PatientResponse(PatientBase):
   id: int
   created_at: datetime
