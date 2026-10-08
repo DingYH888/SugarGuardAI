@@ -7,6 +7,7 @@ from app.models.diet_record import DietRecord
 from app.models.medication import Medication
 from app.models.exercise import Exercise
 from app.models.health_report import HealthReport
+from app.models.chat_history import ChatHistory
 
 # 供外部导入和 Tortoise 配置引用
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
   "Medication",
   "Exercise",
   "HealthReport",   
+  "ChatHistory",
 ]
