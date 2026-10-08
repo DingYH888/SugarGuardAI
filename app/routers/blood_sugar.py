@@ -6,7 +6,8 @@ from fastapi import APIRouter, Query, HTTPException
 from tortoise.expressions import Q
 from app.models.patient import Patient
 from app.models.blood_sugar import BloodSugar
-from app.schemas.blood_sugar import BloodSugarCreate, BloodSugarUpdate, BloodSugarResponse
+from app.schemas.blood_sugar import BloodSugarCreate, BloodSugarUpdate, BloodSugarResponse, BloodSugarStatsResponse
+from app.core.health_analyzer import health_analyzer
 
 router = APIRouter(prefix="/blood-sugar", tags=["blood-sugar"])
 
@@ -86,3 +87,11 @@ async def delete_record(record_id: int):
     raise HTTPException(status_code=404, detail="血糖记录不存在")
   await record.delete()
   return {"message": "删除成功"}
+
+# 获取患者血糖统计
+@router.get("/patient/{patient_id}/stats", response_model=BloodSugarStatsResponse)
+async def get_stats(patient_id: int, days: int = Query(7, ge=1, le=90)):
+  """获取患者近N天血糖统计数据，包含平均血糖、达标率、趋势和风险等级。"""
+  await Patient.get_or_none(id=patient_id)
+  analysis = await health_analyzer.analyze_blood_sugar(patient_id, days)
+  return BloodSugarStatsResponse(**analysis)
