@@ -7,6 +7,7 @@ from app.routers import (
   diet_record,
   medication,
   exercise,
+  health_report,    
 )
 
 # 创建一个主路由，专门挂在所有的 API 
@@ -16,3 +17,4 @@ main_router.include_router(blood_sugar.router)
 main_router.include_router(diet_record.router)
 main_router.include_router(medication.router)
 main_router.include_router(exercise.router)
+main_router.include_router(health_report.router) 

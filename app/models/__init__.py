@@ -6,6 +6,7 @@ from app.models.blood_sugar import BloodSugar
 from app.models.diet_record import DietRecord
 from app.models.medication import Medication
 from app.models.exercise import Exercise
+from app.models.health_report import HealthReport
 
 # 供外部导入和 Tortoise 配置引用
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
   "DietRecord",
   "Medication",
   "Exercise",
+  "HealthReport",   
 ]
