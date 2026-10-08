@@ -1,9 +1,10 @@
 """饮食管理 API 路由。"""
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException,Query
 from tortoise.expressions import Q
 
+from app.core.diet_advisor import diet_advisor
 from app.models.patient import Patient
 from app.models.diet_record import DietRecord
 from app.schemas.diet_record import DietRecordCreate, DietRecordUpdate, DietRecordResponse
@@ -96,3 +97,11 @@ async def delete_record(record_id: int):
     raise HTTPException(status_code=404, detail="饮食记录不存在")
   await record.delete()
   return {"message": "删除成功"}
+
+# 每日营养统计
+@router.get("/patient/{patient_id}/daily")
+async def get_daily_nutrition(patient_id: int, date: Optional[str] = Query(default=None)):
+  patient = await Patient.get_or_none(id=patient_id)
+  if not patient:
+    raise HTTPException(status_code=404, detail="患者不存在")
+  return await diet_advisor.get_daily_nutrition(patient_id, date)
