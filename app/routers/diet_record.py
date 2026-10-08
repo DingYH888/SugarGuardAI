@@ -7,6 +7,7 @@ from tortoise.expressions import Q
 from app.core.diet_advisor import diet_advisor
 from app.models.patient import Patient
 from app.models.diet_record import DietRecord
+from app.models.blood_sugar import BloodSugar
 from app.schemas.diet_record import DietRecordCreate, DietRecordUpdate, DietRecordResponse
 
 router = APIRouter(prefix="/diet", tags=["diet"])
@@ -105,3 +106,10 @@ async def get_daily_nutrition(patient_id: int, date: Optional[str] = Query(defau
   if not patient:
     raise HTTPException(status_code=404, detail="患者不存在")
   return await diet_advisor.get_daily_nutrition(patient_id, date)
+
+# 饮食推荐
+@router.get("/recommend/{meal_type}")
+async def recommend_meal(patient_id: int, meal_type: str):
+  # 查询患者最近的血糖记录
+  recent_bg = await BloodSugar.get_or_none(patient_id=patient_id).order_by("-created_at").first()
+  return diet_advisor.recommend_meal(meal_type, recent_bg.value)

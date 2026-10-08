@@ -4,6 +4,20 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional 
 from app.models.diet_record import DietRecord
 
+# 定义静态的糖尿病推荐食谱库
+RECOMMENDED_FOODS: List[Dict] = [
+   {"name": "燕麦粥", "calories": 150, "carbs": 27, "protein": 5, "fat": 3, "gi": 55, "meal": "早餐", "tip": "富含膳食纤维，升糖慢"},
+   {"name": "水煮鸡蛋", "calories": 78, "carbs": 0.6, "protein": 6, "fat": 5, "gi": 0, "meal": "早餐", "tip": "优质蛋白质，几乎不含碳水"},
+   {"name": "全麦面包", "calories": 246, "carbs": 41, "protein": 13, "fat": 3, "gi": 51, "meal": "早餐", "tip": "比白面包GI低很多"},
+   {"name": "清蒸鱼", "calories": 120, "carbs": 0, "protein": 20, "fat": 4, "gi": 0, "meal": "午餐/晚餐", "tip": "优质蛋白+omega-3脂肪酸"},
+   {"name": "糙米饭", "calories": 220, "carbs": 46, "protein": 5, "fat": 2, "gi": 56, "meal": "午餐/晚餐", "tip": "比白米GI低，营养更丰富"},
+   {"name": "西兰花", "calories": 34, "carbs": 7, "protein": 3, "fat": 0.4, "gi": 15, "meal": "午餐/晚餐", "tip": "低GI蔬菜，富含维C"},
+   {"name": "苦瓜", "calories": 17, "carbs": 3.7, "protein": 1, "fat": 0.2, "gi": 24, "meal": "午餐/晚餐", "tip": "传统降糖食材"},
+   {"name": "豆腐", "calories": 76, "carbs": 1.9, "protein": 8, "fat": 4.8, "gi": 15, "meal": "午餐/晚餐", "tip": "植物蛋白，低GI"},
+   {"name": "苹果", "calories": 52, "carbs": 14, "protein": 0.3, "fat": 0.2, "gi": 36, "meal": "加餐", "tip": "低GI水果，适量食用"},
+   {"name": "无糖酸奶", "calories": 63, "carbs": 4.7, "protein": 5, "fat": 2, "gi": 27, "meal": "加餐", "tip": "益生菌+蛋白质"},
+]
+
 class DietAdvisor:
   """ 饮食建议类，封装营养分析和食谱推荐逻辑 """
   async def get_daily_nutrition(self, patient_id: int,date_str:Optional[str] = None) -> Dict:
@@ -85,5 +99,25 @@ class DietAdvisor:
       return "碳水化合物摄入适中，建议维持"
     return "碳水化合物摄入偏高，注意控制碳水"
 
+  def recommend_meal(self, meal_type: str, recent_bg: Optional[float] = None) -> List[Dict]:
+    """
+     根据当前餐次和近期血糖水平推荐餐食
+     :param meal_type: 想要查询的餐次（早餐/午餐/晚餐）
+     :param recent_bg: 最近一次测量的血糖值
+     """
+    # 从食谱库中初步筛选：匹配餐次，或者标记为“加餐”的通用食物
+    suitable = [f for f in RECOMMENDED_FOODS if meal_type in f["meal"] or f["meal"] == "加餐"]
+    
+    # 针对糖尿病的个性化逻辑：如果血糖高于 8.0 mmol/L（控制不佳）
+    if recent_bg and recent_bg > 8.0:
+      # 将候选食物按照 GI 值从低到高排序，并只取前 4 个升糖最慢的
+      suitable = sorted(suitable, key=lambda x: x["gi"])[:4]
+    # 如果血糖正常或未提供血糖值
+    else:
+      # 默认取库中的前 5 个建议
+      suitable = suitable[:5]
+      
+    return suitable # 返回推荐食物列表
+  
 # 实例化单例对象
 diet_advisor = DietAdvisor()
