@@ -9,7 +9,7 @@ class DietRecordBase(BaseModel):
   protein: Optional[float] = None
   fat: Optional[float] = None
   gi_value: Optional[float] = None
-  portion: float = 1.0
+  portion: Optional[float] = 1.0
   meal_type: Optional[str] = None
   eaten_at: datetime
   note: Optional[str] = None

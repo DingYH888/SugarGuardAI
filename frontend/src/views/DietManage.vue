@@ -251,6 +251,11 @@ function cancelEdit() {
   }
 }
 
+function formatLocalTime(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+}
+
 async function submit() {
   if (!patientStore.currentPatient) {
     ElMessage.warning('请先选择患者')
@@ -267,9 +272,9 @@ async function submit() {
     const payload = {
       food_name: form.value.food_name,
       meal_type: form.value.meal_type,
-      eaten_at: form.value.eaten_at,
+      eaten_at: form.value.eaten_at || formatLocalTime(new Date()),
       calories: form.value.calories,
-      portion: form.value.portion,
+      portion: form.value.portion ?? 1.0,
       carbs: form.value.carbs,
       protein: form.value.protein,
       fat: form.value.fat,

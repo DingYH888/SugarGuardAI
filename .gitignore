@@ -111,6 +111,9 @@ chroma_db/
 *.chroma
 vectorstore/
 
+# ---------- 本地模型文件 ----------
+embeddingmodels/
+
 # ---------- 日志 ----------
 *.log
 logs/

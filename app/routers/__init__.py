@@ -8,6 +8,7 @@ from app.routers import (
   medication,
   exercise,
   health_report,    
+  chat,
 )
 
 # 创建一个主路由，专门挂在所有的 API 
@@ -18,3 +19,4 @@ main_router.include_router(diet_record.router)
 main_router.include_router(medication.router)
 main_router.include_router(exercise.router)
 main_router.include_router(health_report.router) 
+main_router.include_router(chat.router)

@@ -30,9 +30,10 @@ class VectorStore:
     # 实例化持久化客户端
     self.client = chromadb.PersistentClient(path=chroma_persist_dir)
 
-    # 设置中文词嵌入模型
+    # 设置中文词嵌入模型（本地 ModelScope 下载的 bge-large-zh-v1.5）
+    _model_dir = Path(__file__).resolve().parent.parent.parent / "embeddingmodels" / "embedding"
     self.embeddings = HuggingFaceEmbeddings(
-      model_name="paraphrase-multilingual-MiniLM-L12-v2",
+      model_name=str(_model_dir),
       encode_kwargs={"normalize_embeddings": True},
      )
 
